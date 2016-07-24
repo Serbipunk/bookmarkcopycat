@@ -1,11 +1,5 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// Search the bookmarks when entering the search keyword.
-
-function splitNode(bookmark_node) {
-  var node_obj = {};
+function parseNode(bookmark_node) {
+  var node_obj = new Object;
   var children_nodes = [];
   
   //when I can cope with Exception in Javascript, I will replace the 2 if lines
@@ -27,7 +21,7 @@ function splitNode(bookmark_node) {
   if( bookmark_node.dateAdded ) {
     node_obj.dateAdded = bookmark_node.dateAdded;
   }
-  if( bookmark_node.children.length>0 ) {
+  if( bookmark_node.children ) {
     var i;
     for(i=0; i<bookmark_node.children.length; i++) {
       children_nodes.push(bookmark_node.children[i]);
@@ -37,27 +31,67 @@ function splitNode(bookmark_node) {
   return [node_obj, children_nodes];
 }
 
-function dumpTreeNodes(bookmark_nodes) {
+function dumpBookmarks(bookmark_nodes) {
+  
   var i;
-  var bms_obj = {}
-  /*
-  for (i = 0; i < bookmark_nodes.length; i++) {
-    
+  
+  var nodes_queue = [];
+  var nodes_fid_queue = [];   //father's id queue
+  
+  var nodes_data = [];    //save nodes data in array
+  var nodes_map = [];   //save relation of nodes
+  
+  for( i=0; i<bookmark_nodes.length; i++ ) {
+    nodes_queue.push( bookmark_nodes[i] );
+    nodes_fid_queue.push( -1 );
   }
-  */
-  var res = splitNode( bookmark_nodes[0] );
+  
+  while( nodes_queue.length > 0 ) {
+    var node = nodes_queue.shift();
+    var fid = nodes_fid_queue.shift();
+    
+    var res = parseNode(node);
+    var res_obj = res[0];
+    var res_sons = res[1];
+    
+    // save this node's datum
+    nodes_data.push(res_obj);
+    // save relation of relation
+    var id = -2;        // miss id's clue
+    if( res_obj.id ) {
+      id = res_obj.id;
+    }
+    nodes_map.push( {src: fid, dst: id} )
+    
+    //load children into queue
+    var j=0;
+    for(j=0; j<res_sons.length; j++) {
+      nodes_queue.push( res_sons[j] );
+      nodes_fid_queue.push( id );
+    }
+  }
+  
+  var bookmarks_obj = {data: nodes_data, structure: nodes_map};
+  
+  var json = JSON.stringify(bookmarks_obj);
+  
+  alert( json );
+  
+  return json;
 }
-
 
 document.addEventListener('DOMContentLoaded', function () {
   //dumpBookmarks();
   $('#bookmarks').append("hello bookmark");
-  var str = ""
-  var bookmarkTreeNodes = chrome.bookmarks.getTree(
+  
+  
+  chrome.bookmarks.getTree(
     function(bookmarkTreeNodes) {
-      //$('#bookmarks').append(dumpTreeNodes(bookmarkTreeNodes, query))
-      dumpTreeNodes(bookmarkTreeNodes);
+      
+      dumpBookmarks( bookmarkTreeNodes );
+      
     }
   );
-  $('bookmarks').append("fuck there");
+  
+  
 });
