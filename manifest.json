@@ -3,7 +3,9 @@
   "version": "1.1",
   "description": "A browser action with a popup dump of all bookmarks, including search, add, edit and delete.",
   "permissions": [
-    "bookmarks"
+    "bookmarks",
+    "storage",
+    "unlimitedStorage"
   ],
   "browser_action": {
       "default_title": "My Bookmarks",
