@@ -1,17 +1,18 @@
 {
-  "name": "My Bookmarks",
-  "version": "1.1",
-  "description": "A browser action with a popup dump of all bookmarks, including search, add, edit and delete.",
+  "name": "PokeStar",
+  "version": "0.9",
+  "description": "this bookmark extension copy the Chrome bookmark data using Chrome API and keep the duplicate locally.",
   "permissions": [
     "bookmarks",
     "storage",
     "unlimitedStorage"
   ],
   "browser_action": {
-      "default_title": "My Bookmarks",
+      "default_title": "PokeStar",
       "default_icon": "icon.png",
       "default_popup": "popup.html"
   },
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'"
+  //"content_security_policy": "script-src 'self'; object-src 'self'"
 }
