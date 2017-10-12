@@ -2,5 +2,4 @@
 
 ## Introduction
 
-this bookmark extension copy the Chrome bookmark data using Chrome API and keep the duplicate locally.
-
+this bookmark extension loads the Chrome bookmark data using Chrome API and keeps the them locally.
