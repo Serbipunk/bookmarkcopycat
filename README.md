@@ -2,4 +2,4 @@
 
 ## Introduction
 
-this bookmark extension loads the Chrome bookmark data using Chrome API and keeps the them locally.
+this bookmark extension loads the Chrome bookmark data using Chrome API and keeps them locally.
